@@ -51,6 +51,56 @@ A modern task management application built with Go (backend) and Vue.js (fronten
 - PostgreSQL 12 or higher
 - npm or yarn
 
+## PostgreSQL Setup
+
+1. Install PostgreSQL:
+
+   ```bash
+   # For macOS using Homebrew
+   brew install postgresql@13
+   ```
+
+2. Start PostgreSQL service:
+
+   ```bash
+   # Start PostgreSQL
+   brew services start postgresql
+
+   # Verify it's running
+   brew services list
+   ```
+
+3. Create database and user:
+
+   ```bash
+   # Connect to PostgreSQL
+   psql postgres
+
+   # Create database
+   CREATE DATABASE task_management;
+
+   # Create user with password
+   CREATE USER task_user WITH ENCRYPTED PASSWORD 'your_password';
+
+   # Grant privileges
+   GRANT ALL PRIVILEGES ON DATABASE task_management TO task_user;
+
+   # Exit psql
+   \q
+   ```
+
+4. Configure environment variables:
+
+   ```bash
+   # Create .env file in backend directory
+   echo "DB_HOST=localhost
+   DB_PORT=5432
+   DB_USER=task_user
+   DB_PASSWORD=your_password
+   DB_NAME=task_management
+   JWT_SECRET=your_jwt_secret" > backend/.env
+   ```
+
 ## Setup and Installation
 
 ### 1. Clone the Repository
@@ -67,9 +117,6 @@ cd backend
 
 # Install Go dependencies
 go mod download
-
-# Set up the database
-# Create a PostgreSQL database and update the connection details in config/database.go
 
 # Run the backend server
 go run main.go
@@ -90,6 +137,24 @@ npm run dev
 ```
 
 The frontend development server will start on `http://localhost:5173`
+
+## Shutting Down the Application
+
+1. Stop the Frontend:
+   - Press `Ctrl + C` in the frontend terminal
+
+2. Stop the Backend:
+   - Press `Ctrl + C` in the backend terminal
+
+3. Stop PostgreSQL:
+
+   ```bash
+   # Stop PostgreSQL service
+   brew services stop postgresql
+
+   # Verify it's stopped
+   brew services list
+   ```
 
 ## API Endpoints
 
