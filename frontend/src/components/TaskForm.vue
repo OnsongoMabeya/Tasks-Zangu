@@ -133,7 +133,7 @@ const handleSubmit = async () => {
     }
 
     if (isEditing.value) {
-      await taskStore.updateTask(route.params.id, taskData)
+      await taskStore.updateTask(parseInt(route.params.id), taskData)
     } else {
       await taskStore.createTask(taskData)
     }

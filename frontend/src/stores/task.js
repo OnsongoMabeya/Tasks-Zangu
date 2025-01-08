@@ -64,7 +64,7 @@ export const useTaskStore = defineStore('task', {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
         })
-        const index = this.tasks.findIndex(task => task.id === id)
+        const index = this.tasks.findIndex(task => task.ID === id)
         if (index !== -1) {
           this.tasks[index] = response.data
         }
@@ -82,7 +82,7 @@ export const useTaskStore = defineStore('task', {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
         })
-        this.tasks = this.tasks.filter(task => task.id !== id)
+        this.tasks = this.tasks.filter(task => task.ID !== id)
       } catch (error) {
         console.error('Error deleting task:', error)
         throw error

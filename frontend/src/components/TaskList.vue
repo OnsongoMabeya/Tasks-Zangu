@@ -55,10 +55,20 @@
 
       <!-- Task List -->
       <div class="bg-white shadow rounded-lg divide-y divide-gray-200">
-        <div v-for="task in filteredTasks" :key="task.id" class="p-6">
+        <div v-for="task in filteredTasks" :key="task.ID" class="p-6">
           <div class="flex items-center justify-between">
             <div class="flex-1">
-              <h3 class="text-lg font-medium text-gray-900">{{ task.title }}</h3>
+              <div class="flex items-center">
+                <input
+                  type="checkbox"
+                  :checked="task.status === 'completed'"
+                  @change="toggleTaskStatus(task)"
+                  class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer"
+                />
+                <h3 class="ml-3 text-lg font-medium" :class="{'text-gray-900': task.status !== 'completed', 'text-gray-500 line-through': task.status === 'completed'}">
+                  {{ task.title }}
+                </h3>
+              </div>
               <p class="mt-1 text-sm text-gray-500">{{ task.description }}</p>
               <div class="mt-2 flex items-center space-x-4">
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
@@ -86,13 +96,13 @@
             </div>
             <div class="ml-4 flex items-center space-x-2">
               <router-link
-                :to="`/tasks/${task.id}/edit`"
+                :to="`/tasks/${task.ID}/edit`"
                 class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 Edit
               </router-link>
               <button
-                @click="deleteTask(task.id)"
+                @click="deleteTask(task.ID)"
                 class="inline-flex items-center px-3 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
               >
                 Delete
@@ -142,6 +152,19 @@ const deleteTask = async (taskId) => {
       console.error('Error deleting task:', error)
       alert('Failed to delete task. Please try again.')
     }
+  }
+}
+
+const toggleTaskStatus = async (task) => {
+  try {
+    const updatedTask = {
+      ...task,
+      status: task.status === 'completed' ? 'pending' : 'completed'
+    }
+    await taskStore.updateTask(task.ID, updatedTask)
+  } catch (error) {
+    console.error('Error updating task status:', error)
+    alert('Failed to update task status. Please try again.')
   }
 }
 
