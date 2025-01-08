@@ -1,4 +1,4 @@
-# Task Management System Backend
+# Task Zangu Backend
 
 A robust Go backend service providing RESTful APIs for task management with PostgreSQL database.
 

@@ -1,4 +1,4 @@
-# Task Management System Frontend
+# Task Zangu Frontend
 
 A modern Vue.js application for managing tasks with a clean and intuitive user interface.
 

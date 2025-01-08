@@ -1,4 +1,4 @@
-# Task Management System
+# Task Zangu
 
 A modern task management application built with Go (backend) and Vue.js (frontend). This application allows users to create, manage, and track tasks with features like priority levels, status updates, and deadlines.
 
