@@ -14,56 +14,78 @@ export const useTaskStore = defineStore('task', {
     async fetchTasks() {
       this.loading = true
       try {
-        const token = localStorage.getItem('token')
         const response = await axios.get(`${API_URL}/tasks`, {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
         })
         this.tasks = response.data
       } catch (error) {
-        this.error = error.response?.data?.error || 'Failed to fetch tasks'
+        console.error('Error fetching tasks:', error)
+        throw error
       } finally {
         this.loading = false
       }
     },
 
-    async createTask(task) {
+    async getTask(id) {
       try {
-        const token = localStorage.getItem('token')
-        const response = await axios.post(`${API_URL}/tasks`, task, {
-          headers: { Authorization: `Bearer ${token}` }
+        const response = await axios.get(`${API_URL}/tasks/${id}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        return response.data
+      } catch (error) {
+        console.error('Error getting task:', error)
+        throw error
+      }
+    },
+
+    async createTask(taskData) {
+      try {
+        const response = await axios.post(`${API_URL}/tasks`, taskData, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
         })
         this.tasks.push(response.data)
         return response.data
       } catch (error) {
-        throw error.response?.data?.error || 'Failed to create task'
+        console.error('Error creating task:', error)
+        throw error
       }
     },
 
-    async updateTask(id, task) {
+    async updateTask(id, taskData) {
       try {
-        const token = localStorage.getItem('token')
-        const response = await axios.put(`${API_URL}/tasks/${id}`, task, {
-          headers: { Authorization: `Bearer ${token}` }
+        const response = await axios.put(`${API_URL}/tasks/${id}`, taskData, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
         })
-        const index = this.tasks.findIndex(t => t.id === id)
+        const index = this.tasks.findIndex(task => task.id === id)
         if (index !== -1) {
           this.tasks[index] = response.data
         }
         return response.data
       } catch (error) {
-        throw error.response?.data?.error || 'Failed to update task'
+        console.error('Error updating task:', error)
+        throw error
       }
     },
 
     async deleteTask(id) {
       try {
-        const token = localStorage.getItem('token')
         await axios.delete(`${API_URL}/tasks/${id}`, {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
         })
-        this.tasks = this.tasks.filter(t => t.id !== id)
+        this.tasks = this.tasks.filter(task => task.id !== id)
       } catch (error) {
-        throw error.response?.data?.error || 'Failed to delete task'
+        console.error('Error deleting task:', error)
+        throw error
       }
     }
   }

@@ -1,14 +1,13 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-const API_URL = 'http://localhost:8080'
+const BASE_URL = 'http://localhost:8080'
+const API_URL = `${BASE_URL}/api`
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    token: localStorage.getItem('token'),
-    user: null,
-    loading: false,
-    error: null
+    token: null,
+    user: null
   }),
 
   getters: {
@@ -16,37 +15,33 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
-    async login(username, password) {
-      this.loading = true
+    setToken(token) {
+      this.token = token
+      localStorage.setItem('token', token)
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    },
+
+    async login(credentials) {
       try {
-        const response = await axios.post(`${API_URL}/login`, {
-          username,
-          password
-        })
-        this.token = response.data.token
-        localStorage.setItem('token', this.token)
+        const response = await axios.post(`${BASE_URL}/login`, credentials)
+        this.setToken(response.data.token)
+        this.user = response.data.user
         return response.data
       } catch (error) {
-        this.error = error.response?.data?.error || 'Login failed'
-        throw this.error
-      } finally {
-        this.loading = false
+        console.error('Login error:', error)
+        throw error
       }
     },
 
-    async register(username, password) {
-      this.loading = true
+    async register(userData) {
       try {
-        const response = await axios.post(`${API_URL}/register`, {
-          username,
-          password
-        })
+        const response = await axios.post(`${BASE_URL}/register`, userData)
+        this.setToken(response.data.token)
+        this.user = response.data.user
         return response.data
       } catch (error) {
-        this.error = error.response?.data?.error || 'Registration failed'
-        throw this.error
-      } finally {
-        this.loading = false
+        console.error('Registration error:', error)
+        throw error
       }
     },
 
@@ -54,6 +49,7 @@ export const useAuthStore = defineStore('auth', {
       this.token = null
       this.user = null
       localStorage.removeItem('token')
+      delete axios.defaults.headers.common['Authorization']
     }
   }
 })

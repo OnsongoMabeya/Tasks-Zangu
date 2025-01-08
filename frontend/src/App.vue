@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-100">
-    <nav v-if="authStore.isAuthenticated" class="bg-white shadow-sm">
+    <nav class="bg-white shadow-sm">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
           <div class="flex">
@@ -8,10 +8,10 @@
               <h1 class="text-xl font-bold text-gray-900">Task Manager</h1>
             </div>
           </div>
-          <div class="flex items-center">
+          <div class="flex items-center" v-if="authStore.isAuthenticated">
             <button
               @click="logout"
-              class="ml-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+              class="ml-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
             >
               Logout
             </button>
@@ -19,8 +19,7 @@
         </div>
       </div>
     </nav>
-
-    <main class="py-10">
+    <main>
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <router-view></router-view>
       </div>
@@ -29,12 +28,19 @@
 </template>
 
 <script setup>
-import { useAuthStore } from './stores/auth'
 import { useRouter } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { useAuthStore } from './stores/auth'
 
-const authStore = useAuthStore()
 const router = useRouter()
+const authStore = useAuthStore()
+
+// Check authentication status on app load
+const token = localStorage.getItem('token')
+if (token) {
+  authStore.setToken(token)
+} else {
+  router.push('/login')
+}
 
 const logout = () => {
   authStore.logout()
