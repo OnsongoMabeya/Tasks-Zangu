@@ -8,9 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func SetupRouter(db *gorm.DB) *gin.Engine {
-	r := gin.Default()
-
+func SetupRouter(r *gin.Engine, db *gorm.DB) *gin.Engine {
 	// Create handlers
 	userHandler := handlers.NewUserHandler(db)
 	taskHandler := handlers.NewTaskHandler(db)
