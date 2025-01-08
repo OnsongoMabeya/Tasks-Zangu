@@ -87,13 +87,13 @@
                   :title="getNextStatusTitle(task.status)"
                 >
                   <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors duration-200"
-                       :class="[
-                         task.status === 'completed'
-                           ? 'border-green-500 bg-green-500'
-                           : task.status === 'in_progress'
-                             ? 'border-yellow-500 bg-yellow-500'
-                             : 'border-gray-400 hover:border-blue-400'
-                       ]"
+                        :class="[
+                          task.status === 'completed'
+                            ? 'border-green-500 bg-green-500'
+                            : task.status === 'in_progress'
+                              ? 'border-yellow-500 bg-yellow-500'
+                              : 'border-gray-400 hover:border-blue-400'
+                        ]"
                   >
                     <svg
                       v-if="task.status === 'completed'"
@@ -203,7 +203,7 @@ taskStore.fetchTasks()
 const filteredTasks = computed(() => {
   return taskStore.tasks.filter(task => {
     const matchesSearch = task.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-                         task.description.toLowerCase().includes(searchQuery.value.toLowerCase())
+                          task.description.toLowerCase().includes(searchQuery.value.toLowerCase())
     const matchesStatus = !statusFilter.value || task.status === statusFilter.value
     const matchesPriority = !priorityFilter.value || task.priority === priorityFilter.value
     return matchesSearch && matchesStatus && matchesPriority
@@ -261,34 +261,61 @@ const formatDate = (date) => {
 }
 </script>
 
-<style lang="postcss" scoped>
+<style scoped>
 .glass-card {
-  @apply bg-gray-800/80 backdrop-blur-lg border border-gray-700/50 
-         shadow-xl rounded-xl;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(55, 65, 81, 0.5);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
 }
 
 .form-label {
-  @apply block text-sm font-medium text-gray-300;
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #d2d2d2;
+  margin-bottom: 10px;
 }
 
 .input-field {
-  @apply w-full rounded-lg border border-gray-600 
-         text-black font-medium
-         focus:ring-2 focus:ring-blue-500 focus:border-transparent 
-         transition-all duration-300;
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid #4B5563;
+  color: #000000;
+  font-weight: 500;
+  transition-property: all;
+  transition-duration: 300ms;
+  padding: 12px;
+  height: 40px;
+}
+
+.input-field:focus {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  border-color: transparent;
 }
 
 .input-field::placeholder {
-  @apply text-gray-500 opacity-70 font-normal;
+  color: #6B7280;
+  opacity: 0.7;
+  font-weight: normal;
 }
 
 .btn-danger {
-  @apply bg-red-600 text-white 
-         hover:bg-red-700
-         rounded-lg transition-all duration-300
-         focus:outline-none focus:ring-2 
-         focus:ring-red-500 focus:ring-offset-2
-         focus:ring-offset-gray-900;
+  background-color: #dc2626;
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-danger:hover {
+  background-color: #b91c1c;
 }
 
 /* List Transitions */
