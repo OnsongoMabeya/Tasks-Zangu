@@ -219,11 +219,18 @@ const resetFilters = () => {
 
 // Toggle task status
 const toggleTaskStatus = async (task) => {
-  const statusOrder = ['pending', 'in_progress', 'completed']
-  const currentIndex = statusOrder.indexOf(task.status)
-  const nextIndex = (currentIndex + 1) % statusOrder.length
-  const newStatus = statusOrder[nextIndex]
-  await taskStore.updateTask(task.id, { ...task, status: newStatus })
+  if (!task || !task.id) return;
+  
+  const statusOrder = ['pending', 'in_progress', 'completed'];
+  const currentIndex = statusOrder.indexOf(task.status);
+  const nextIndex = (currentIndex + 1) % statusOrder.length;
+  const newStatus = statusOrder[nextIndex];
+  
+  try {
+    await taskStore.updateTask(task.id, { ...task, status: newStatus });
+  } catch (error) {
+    console.error('Failed to update task status:', error);
+  }
 }
 
 // Get next status title for button tooltip
@@ -265,10 +272,14 @@ const formatDate = (date) => {
 }
 
 .input-field {
-  @apply block w-full rounded-lg border-gray-700 bg-gray-800/50
-         text-gray-100 placeholder-gray-500
+  @apply w-full rounded-lg border border-gray-600 
+         text-black font-medium
          focus:ring-2 focus:ring-blue-500 focus:border-transparent 
          transition-all duration-300;
+}
+
+.input-field::placeholder {
+  @apply text-gray-500 opacity-70 font-normal;
 }
 
 .btn-danger {

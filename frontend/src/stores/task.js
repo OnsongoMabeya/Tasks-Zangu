@@ -58,13 +58,18 @@ export const useTaskStore = defineStore('task', {
     },
 
     async updateTask(id, taskData) {
+      if (!id || id === 'undefined') {
+        console.error('Invalid task ID');
+        return;
+      }
+
       try {
         const response = await axios.put(`${API_URL}/tasks/${id}`, taskData, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
         })
-        const index = this.tasks.findIndex(task => task.ID === id)
+        const index = this.tasks.findIndex(task => task.id === id)
         if (index !== -1) {
           this.tasks[index] = response.data
         }
