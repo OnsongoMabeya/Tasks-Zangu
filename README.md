@@ -27,9 +27,9 @@ A modern task management application built with Go (backend) and Vue.js (fronten
 ### Backend
 
 - **Language**: Go
-- **Framework**: Gin (Web Framework)
+- **Framework**: Gin (Web Framework) - use Net/http
 - **Database**: PostgreSQL
-- **ORM**: GORM
+- **ORM**: GORM - change to RAW sql
 - **Authentication**: JWT
 - **Other Libraries**:
   - `golang.org/x/crypto` for password hashing
